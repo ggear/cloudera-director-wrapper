@@ -1,0 +1,17 @@
+#!/bin/sh
+
+source "$LAUNCHPAD_WRAPPER_HOME"/bin/launchpad.env
+
+if [ $# -le 0 ]; then
+  "$LAUNCHPAD_HOME"/bin/launchpad
+  exit 1
+fi
+
+CMD="$1"
+shift
+
+if [ "$CMD" = "bootstrap" ]; then
+  rm -rf "$LAUNCHPAD_HOME"/logs/application.log
+fi
+
+"$LAUNCHPAD_HOME/bin/launchpad" "$CMD" "$LAUNCHPAD_WRAPPER_HOME"/cfg/aws.conf
