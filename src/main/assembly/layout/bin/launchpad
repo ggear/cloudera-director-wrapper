@@ -14,4 +14,4 @@ if [ "$CMD" = "bootstrap" ]; then
   rm -rf "$LAUNCHPAD_HOME"/logs/application.log
 fi
 
-"$LAUNCHPAD_HOME/bin/launchpad" "$CMD" "$LAUNCHPAD_WRAPPER_HOME"/cfg/aws.conf
+"$LAUNCHPAD_HOME/bin/launchpad" "$CMD" "$LAUNCHPAD_WRAPPER_HOME"/cfg/aws.conf "$@"

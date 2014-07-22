@@ -1,0 +1,79 @@
+#!/bin/sh
+
+source "$LAUNCHPAD_WRAPPER_HOME"/bin/launchpad.env
+
+if [ $# -ne 2 ]; then
+  echo "Usage: [user@]<hostname> <command>"
+  echo "Available commands: bootstrap, status, update, terminate"
+  exit 1
+fi
+
+GWY="$1"
+CMD="$2"
+SSH="ssh -q"
+CFG="aws.conf"
+LOG="bootstrap.log"
+LPP="--lp.terminate=true"
+
+if [ "$CMD" = "bootstrap" ]; then
+  $SSH "$GWY" \
+    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
+    "[ ! -d \$LAUNCHPAD_WRAPPER_HOME/log ] &&" \
+    "mkdir -p \$LAUNCHPAD_WRAPPER_HOME/log &&" \
+    "echo \"Starting process in the background\" &&" \
+    "(nohup \$LAUNCHPAD_WRAPPER_HOME/bin/launchpad bootstrap $LPP </dev/null >\$LAUNCHPAD_WRAPPER_HOME/log/$LOG 2>&1 &) &&" \
+    "sleep 2"
+  $SSH -t "$GWY" \
+    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
+    "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
+    "cat \$LAUNCHPAD_WRAPPER_HOME/log/$LOG &&" \
+    "tail -c 0 -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG"
+elif [ "$CMD" = "status" ]; then  
+  $SSH -t "$GWY" \
+    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
+    "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
+    "\$LAUNCHPAD_WRAPPER_HOME/bin/launchpad $CMD $LPP"
+  #TODO
+  #grep $LOG for manager/navigator consoles
+  #grep status for consoles
+  #download config
+  #build console list
+  #print console URLs
+  #print ssh port forwarding connect string
+  #HOST_MANAGEMENT="10.0.0.241"
+  #ssh -L 7180:"$HOST_MANAGEMENT":7180 -L 7187:"$HOST_MANAGEMENT":7187 root@console.janeandgraham.com
+elif [ "$CMD" = "terminate" ]; then
+  $SSH -t "$GWY" \
+    "[ \$(ps aux|grep -v grep|grep java|grep launchpad|awk '{print \$2}'|wc -l) -ge 1  ] &&" \
+    "echo \"Terminating running processes\" &&" \
+    "kill -9 \$(ps aux|grep -v grep|grep java|grep launchpad|awk '{print \$2}')"
+  $SSH -t "$GWY" \
+    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
+    "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
+    "[ \$(ls \$LAUNCHPAD_WRAPPER_HOME/cfg/.$CFG.* 2>/dev/null|wc -l) -ge 1  ] &&" \
+    "\$LAUNCHPAD_WRAPPER_HOME/bin/launchpad terminate $LPP"
+  $LAUNCHPAD_WRAPPER_HOME/bin/launchpad-remote $GWY clean
+elif [ "$CMD" = "clean" ]; then
+  $SSH -t "$GWY" \
+    "[ \$(ps aux|grep -v grep|grep java|grep launchpad|awk '{print \$2}'|wc -l) -ge 1  ] &&" \
+    "echo \"Terminating running processes\" &&" \
+    "kill -9 \$(ps aux|grep -v grep|grep java|grep launchpad|awk '{print \$2}')"
+  $SSH -t "$GWY" \
+    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
+    "[ \$(ls \$LAUNCHPAD_WRAPPER_HOME/cfg/.$CFG.* 2>/dev/null|wc -l) -ge 1  ] &&" \
+    "echo \"Deleting persisted state\" &&" \
+    "rm -rf \$LAUNCHPAD_WRAPPER_HOME/cfg/.$CFG.*"
+  $SSH -t "$GWY" \
+    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
+    "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
+    "echo \"Deleting boostrap log\" &&" \
+    "rm -rf \$LAUNCHPAD_WRAPPER_HOME/log"
+  [ $(ps aux|grep -v grep|grep ssh|grep "\-L"|grep $GWY|awk '{print $2}'|wc -l) -ge 1  ] && \
+    echo "Terminating remote connections" && \
+    kill -9 $(ps aux|grep -v grep|grep ssh|grep "\-L"|grep $GWY|awk '{print $2}')
+else
+  $SSH -t "$GWY" \
+    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
+    "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
+    "\$LAUNCHPAD_WRAPPER_HOME/bin/launchpad $CMD $LPP"
+fi
