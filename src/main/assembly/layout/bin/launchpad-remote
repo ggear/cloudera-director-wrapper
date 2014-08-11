@@ -4,7 +4,7 @@ source "$LAUNCHPAD_WRAPPER_HOME"/bin/launchpad.env
 
 if [ $# -ne 2 ]; then
   echo "Usage: [user@]<hostname> <command>"
-  echo "Available commands: bootstrap, connect, status, update, terminate, clean"
+  echo "Available commands: bootstrap, validate, client, connect, status, update, terminate, clean"
   exit 1
 fi
 
@@ -14,7 +14,7 @@ MGR="7180"
 SSH="ssh -q"
 CFG="aws.conf"
 LOG="bootstrap.log"
-LPP="--lp.terminate=true"
+LPP="--lp.terminate.assumeYes=true"
 
 if [ "$CMD" = "bootstrap" ]; then
   $SSH "$GWY" \
