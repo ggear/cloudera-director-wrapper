@@ -1,0 +1,6 @@
+#!/bin/sh
+
+source "$LAUNCHPAD_WRAPPER_HOME"/bin/launchpad.env
+
+su -c "hadoop fs -mkdir -p /user/$USER" hdfs
+su -c "hadoop fs -chown -R root /user/$USER" hdfs
