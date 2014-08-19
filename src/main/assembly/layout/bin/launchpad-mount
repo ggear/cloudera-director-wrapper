@@ -4,5 +4,6 @@ source "$LAUNCHPAD_WRAPPER_HOME"/bin/launchpad.env
 
 mkdir -p $CLUSTER_FUSE_MOUNT
 
+umount $CLUSTER_FUSE_MOUNT > /dev/null 2>&1
 hadoop-fuse-dfs $CLUSTER_NAMENODE $CLUSTER_FUSE_MOUNT > /dev/null
 
