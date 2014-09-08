@@ -76,6 +76,12 @@ elif [ "$CMD" = "clean" ]; then
   [ $(ps aux|grep -v grep|grep ssh|grep "\-L"|grep $GWY|awk '{print $2}'|wc -l) -ge 1  ] && \
     echo "Terminating remote connections" && \
     kill -9 $(ps aux|grep -v grep|grep ssh|grep "\-L"|grep $GWY|awk '{print $2}')
+elif [ "$CMD" = "client" ]; then
+  $SSH -t "$GWY" \
+    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
+    "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
+    "[ \$(grep \"Cluster ready\" \$LAUNCHPAD_WRAPPER_HOME/log/$LOG|wc -l) -ge 1 ] &&" \
+    "\$LAUNCHPAD_WRAPPER_HOME/bin/launchpad download-client-config $LPP"
 else
   $SSH -t "$GWY" \
     "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
