@@ -74,7 +74,7 @@ cluster {
   products {
     CDH: 5
   }
-  services: [HDFS, YARN, HIVE, IMPALA, OOZIE, SQOOP, FLUME, HUE]
+  services: [HDFS, YARN, ZOOKEEPER, HIVE, IMPALA, OOZIE, SQOOP, FLUME, HUE]
   master-1 {
     count: 1
     minCount: 1
@@ -106,6 +106,7 @@ cluster {
     roles {
       HDFS: [DATANODE]
       YARN: [NODEMANAGER]
+      ZOOKEEPER: [SERVER]
       IMPALA: [IMPALAD]
       FLUME: [AGENT]
     }
