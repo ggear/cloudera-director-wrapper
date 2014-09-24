@@ -12,7 +12,7 @@ rm -rf /usr/lib/hadoop /usr/lib/hive /usr/lib/whirr
 sleep 1
 
 if [ "$VERSION" = "5" ]; then
-	yum install -y --disablerepo=cloudera-cdh4 hadoop-client hive impala-shell hive-hbase hadoop-hdfs-fuse
+	yum install -y --disablerepo=cloudera-cdh4 hadoop-client hive impala-shell hive-hbase hadoop-hdfs-fuse solr-mapreduce
 elif [ "$VERSION" = "5.0" ]; then
 	yum install -y hadoop-client-2.3.0+cdh5.0.0+548-1.cdh5.0.0.p0.69.el6hive-0.12.0+cdh5.0.0+308-1.cdh5.0.0.p0.34.el6impala-shell-1.3.0+cdh5.0.0+0-1.cdh5.0.0.p0.126.el6for-bigtop-jsvc-0.6.0+cdh5.0.0+427-1.cdh5.0.0.p0.34.el6bigtop-utils-0.7.0+cdh5.0.0+0-1.cdh5.0.0.p0.36.el6hadoop-2.3.0+cdh5.0.0+548-1.cdh5.0.0.p0.69.el6hadoop-0.20-mapreduce-2.3.0+cdh5.0.0+548-1.cdh5.0.0.p0.69.el6hadoop-hdfs-2.3.0+cdh5.0.0+548-1.cdh5.0.0.p0.69.el6hadoop-mapreduce-2.3.0+cdh5.0.0+548-1.cdh5.0.0.p0.69.el6hadoop-yarn-2.3.0+cdh5.0.0+548-1.cdh5.0.0.p0.69.el6hive-jdbc-0.12.0+cdh5.0.0+308-1.cdh5.0.0.p0.34.el6parquet-1.2.5+cdh5.0.0+91-1.cdh5.0.0.p0.31.el6parquet-format-1.0.0+cdh5.0.0+3-1.cdh5.0.0.p0.39.el6zookeeper-3.4.5+cdh5.0.0+28-1.cdh5.0.0.p0.36.el6 hive-hbase-0.12.0+cdh5.0.0+308-1.cdh5.0.0.p0.34.el6.noarch.rpm hadoop-hdfs-fuse-2.3.0+cdh5.0.0+548-1.cdh5.0.0.p0.69.el6.x86_64.rpm
 elif [ "$VERSION" = "4" ]; then
