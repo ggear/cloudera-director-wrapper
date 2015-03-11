@@ -1,7 +1,7 @@
 name: graham-demo
 
 provider {
-  id: aws
+  type: aws
   accessKeyId: ${?CLOUD_PROVIDER_ID}
   secretAccessKey: ${?CLOUD_PROVIDER_KEY}
   publishAccessKeys: true
@@ -67,13 +67,15 @@ cloudera-manager {
   enableEnterpriseTrial: true
   repository: "http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cm5/redhat/6/x86_64/cm/5/"
   repositoryKeyUrl: "http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cm5/redhat/6/x86_64/cm/RPM-GPG-KEY-cloudera"
-  parcelRepositories: "http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cdh5/parcels/latest/"
 }
 
 cluster {
   products {
     CDH: 5
+    #CDH: 5.3.1
   }
+  parcelRepositories: ["http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cdh5/parcels/latest/"]
+  #parcelRepositories: ["http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cdh5/parcels/5.3.1/"]
   services: [HDFS, YARN, ZOOKEEPER, HIVE, IMPALA, OOZIE, SQOOP, FLUME, HUE]
   master-1 {
     count: 1

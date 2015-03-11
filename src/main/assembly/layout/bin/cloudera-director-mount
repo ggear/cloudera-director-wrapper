@@ -1,8 +1,8 @@
 #!/bin/sh
 
-source "$LAUNCHPAD_WRAPPER_HOME"/bin/launchpad.env
+source "$LAUNCHPAD_WRAPPER_HOME"/bin/cloudera-director.env
 
-mkdir -p $CLUSTER_FUSE_MOUNT
+mkdir -fp $CLUSTER_FUSE_MOUNT > /dev/null 2>&1
 
 umount $CLUSTER_FUSE_MOUNT > /dev/null 2>&1
 hadoop-fuse-dfs $CLUSTER_NAMENODE $CLUSTER_FUSE_MOUNT > /dev/null

@@ -3,11 +3,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.cloudera.launchpad</groupId>
-	<artifactId>launchpad-wrapper</artifactId>
-	<version>0.0.1</version>
+	<groupId>com.cloudera.director</groupId>
+	<artifactId>cloudera-director-wrapper</artifactId>
+	<version>0.0.2</version>
 	<packaging>jar</packaging>
-	<name>Launchpad Wrapper</name>
+	<name>Cloudera Director Wrapper</name>
 
 	<build>
 		<plugins>
