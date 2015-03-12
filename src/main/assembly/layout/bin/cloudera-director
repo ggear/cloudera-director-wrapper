@@ -4,6 +4,7 @@ source "$LAUNCHPAD_WRAPPER_HOME"/bin/cloudera-director.env
 
 if [ $# -le 0 ]; then
   "$LAUNCHPAD_HOME"/bin/cloudera-director
+  echo "Wrapper commands: client, connect, clean"
   exit 1
 fi
 
