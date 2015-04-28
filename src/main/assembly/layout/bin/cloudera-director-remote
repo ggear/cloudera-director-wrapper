@@ -30,7 +30,17 @@ if [ "$CMD" = "bootstrap" ]; then
     "cat \$LAUNCHPAD_WRAPPER_HOME/log/$LOG &&" \
     "tail -c 0 -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG"
 elif [ "$CMD" = "connect" ]; then
-  SSH_PORT_FORWARD=$($SSH -t "$GWY" \
+  SSH_PORT_FORWARD="ssh -o StrictHostKeyChecking=no"$($SSH -t "$GWY" \
+    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
+    "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
+    "[ -f $CLUSTER_PROPERTIES ] &&" \
+    "source $CLUSTER_PROPERTIES &&" \
+    "echo -n \" -L \" && echo -n \$MANAGER_SERVER_PORT && echo -n \":\" && echo -n \$MANAGER_SERVER_HOST && echo -n \":\" && echo -n \$MANAGER_SERVER_PORT &&" \
+    "echo -n \" -L \" && echo -n \$MANAGER_NAVIGATORMETASERVER_PORT && echo -n \":\" && echo -n \$MANAGER_NAVIGATORMETASERVER_HOST && echo -n \":\" && echo -n \$MANAGER_NAVIGATORMETASERVER_PORT &&" \
+    "echo -n \" -L \" && echo -n \$HUE_HUE_SERVER_PORT && echo -n \":\" && echo -n \$HUE_HUE_SERVER_HOST && echo -n \":\" && echo -n \$HUE_HUE_SERVER_PORT &&" \
+    "echo -n \"\"")" $GWY"
+  [ -z "$SSH_PORT_FORWARD" ] && \
+    [ $($SSH -t "$GWY" \
     "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
     "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
     "[ \$(grep \"Cluster ready\" \$LAUNCHPAD_WRAPPER_HOME/log/$LOG|wc -l) -ge 1 ] &&" \
@@ -41,10 +51,10 @@ elif [ "$CMD" = "connect" ]; then
     "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
     "\$(grep \"Configuring Cloudera Manager\" \$LAUNCHPAD_WRAPPER_HOME/log/$LOG)"|wc -l) -ge 1 ] && \
     SSH_PORT_FORWARD="ssh -o StrictHostKeyChecking=no -L 7180:"$($SSH -t "$GWY" \
-    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
-    "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
-    "[ \$(grep \"Configuring Cloudera Manager\" \$LAUNCHPAD_WRAPPER_HOME/log/$LOG|wc -l) -ge 1 ] &&" \
-    "grep \"Normalizing\" \$LAUNCHPAD_WRAPPER_HOME/log/$LOG|awk '{print \$3}'|tr -d '\n'")":7180 $GWY"
+      "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
+      "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
+      "[ \$(grep \"Configuring Cloudera Manager\" \$LAUNCHPAD_WRAPPER_HOME/log/$LOG|wc -l) -ge 1 ] &&" \
+      "grep \"Normalizing\" \$LAUNCHPAD_WRAPPER_HOME/log/$LOG|awk '{print \$3}'|tr -d '\n'")":7180 $GWY"
   [ -z "$SSH_PORT_FORWARD" ] || \
     ( echo "Connecting to bastion host, ctrl-D and crtl-C to quit" && echo $SSH_PORT_FORWARD && $($SSH_PORT_FORWARD &> /dev/null ) )
 elif [ "$CMD" = "terminate" ]; then

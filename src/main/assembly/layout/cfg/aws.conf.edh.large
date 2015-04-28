@@ -72,11 +72,9 @@ cloudera-manager {
 cluster {
   products {
     CDH: 5
-    #CDH: 5.3.1
   }
   parcelRepositories: ["http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cdh5/parcels/latest/"]
-  #parcelRepositories: ["http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cdh5/parcels/5.3.1/"]
-  services: [HDFS, YARN, ZOOKEEPER, HBASE, KS_INDEXER, SPARK, SOLR, HIVE, IMPALA, OOZIE, SQOOP, FLUME, HUE]
+  services: [HDFS, YARN, ZOOKEEPER, HBASE, KS_INDEXER, SPARK, SOLR, HIVE, IMPALA, OOZIE, SQOOP, FLUME, HUE, SENTRY]
   master-1 {
     count: 1
     minCount: 1
@@ -124,6 +122,7 @@ cluster {
       HIVE: [HIVESERVER2, HIVEMETASTORE, WEBHCAT]
       IMPALA: [CATALOGSERVER, STATESTORE]
       HUE: [HUE_SERVER]
+      SENTRY: [SENTRY_SERVER]
     }
   }
   slaves {

@@ -8,6 +8,6 @@ fi
 
 yum remove -y "bigtop*" "hadoop*" "zookeeper*" "hbase*" "hive*" "impala*"
 
-sleep 1
+sleep 5
 
 yum install -y --enablerepo=cloudera-cdh$VERSION hadoop-client hive impala-shell hive-hbase hadoop-hdfs-fuse solr-mapreduce
