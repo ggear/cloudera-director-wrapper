@@ -30,26 +30,31 @@ if [ "$CMD" = "bootstrap" ]; then
     "cat \$LAUNCHPAD_WRAPPER_HOME/log/$LOG &&" \
     "tail -c 0 -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG"
 elif [ "$CMD" = "connect" ]; then
-  SSH_PORT_FORWARD="ssh -o StrictHostKeyChecking=no"$($SSH -t "$GWY" \
+  SSH_PORT_FORWARD=$($SSH -t "$GWY" \
     "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
     "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
     "[ -f $CLUSTER_PROPERTIES ] &&" \
     "source $CLUSTER_PROPERTIES &&" \
+    "echo -n \"ssh -o StrictHostKeyChecking=no\" &&" \
     "echo -n \" -L \" && echo -n \$MANAGER_SERVER_PORT && echo -n \":\" && echo -n \$MANAGER_SERVER_HOST && echo -n \":\" && echo -n \$MANAGER_SERVER_PORT &&" \
     "echo -n \" -L \" && echo -n \$MANAGER_NAVIGATORMETASERVER_PORT && echo -n \":\" && echo -n \$MANAGER_NAVIGATORMETASERVER_HOST && echo -n \":\" && echo -n \$MANAGER_NAVIGATORMETASERVER_PORT &&" \
     "echo -n \" -L \" && echo -n \$HUE_HUE_SERVER_PORT && echo -n \":\" && echo -n \$HUE_HUE_SERVER_HOST && echo -n \":\" && echo -n \$HUE_HUE_SERVER_PORT &&" \
-    "echo -n \"\"")" $GWY"
+    "echo -n \" $GWY\"")
   [ -z "$SSH_PORT_FORWARD" ] && \
     [ $($SSH -t "$GWY" \
-    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
-    "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
-    "[ \$(grep \"Cluster ready\" \$LAUNCHPAD_WRAPPER_HOME/log/$LOG|wc -l) -ge 1 ] &&" \
-    "\$LAUNCHPAD_WRAPPER_HOME/bin/cloudera-director status $LPP|grep \"* Gateway Shell: \"|cut -c 18-|tr -d '\n'")
+      "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
+      "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
+      "\$(grep \"Cluster ready\" \$LAUNCHPAD_WRAPPER_HOME/log/$LOG)"|wc -l) -ge 1 ] && \
+    SSH_PORT_FORWARD=$($SSH -t "$GWY" \
+      "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
+      "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
+      "[ \$(grep \"Cluster ready\" \$LAUNCHPAD_WRAPPER_HOME/log/$LOG|wc -l) -ge 1 ] &&" \
+      "\$LAUNCHPAD_WRAPPER_HOME/bin/cloudera-director status $LPP|grep \"* Gateway Shell: \"|cut -c 18-|tr -d '\n'")
   [ -z "$SSH_PORT_FORWARD" ] && \
     [ $($SSH -t "$GWY" \
-    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
-    "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
-    "\$(grep \"Configuring Cloudera Manager\" \$LAUNCHPAD_WRAPPER_HOME/log/$LOG)"|wc -l) -ge 1 ] && \
+      "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
+      "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
+      "\$(grep \"Configuring Cloudera Manager\" \$LAUNCHPAD_WRAPPER_HOME/log/$LOG)"|wc -l) -ge 1 ] && \
     SSH_PORT_FORWARD="ssh -o StrictHostKeyChecking=no -L 7180:"$($SSH -t "$GWY" \
       "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
       "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
@@ -78,6 +83,11 @@ elif [ "$CMD" = "clean" ]; then
     "[ \$(ls \$LAUNCHPAD_WRAPPER_HOME/cfg/.$CFG.* 2>/dev/null|wc -l) -ge 1  ] &&" \
     "echo \"Deleting persisted state\" &&" \
     "rm -rf \$LAUNCHPAD_WRAPPER_HOME/cfg/.$CFG.*"
+  $SSH -t "$GWY" \
+    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
+    "[ \$(ls $LAUNCHPAD_HADOOP_CONF_DIR/* 2>/dev/null|wc -l) -ge 1  ] &&" \
+    "echo \"Deleting hadoop conf\" &&" \
+    "rm -rf $LAUNCHPAD_HADOOP_CONF_DIR"
   $SSH -t "$GWY" \
     "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
     "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
