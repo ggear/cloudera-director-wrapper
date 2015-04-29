@@ -93,6 +93,11 @@ elif [ "$CMD" = "clean" ]; then
     "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
     "echo \"Deleting boostrap log\" &&" \
     "rm -rf \$LAUNCHPAD_WRAPPER_HOME/log"
+  $SSH -t "$GWY" \
+    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
+    "[ -d ~/.cloudera-director ] &&" \
+    "echo \"Deleting log\" &&" \
+    "rm -rf ~/.cloudera-director"
   [ $(ps aux|grep -v grep|grep ssh|grep "\-L"|grep $GWY|awk '{print $2}'|wc -l) -ge 1  ] && \
     echo "Terminating remote connections" && \
     kill -9 $(ps aux|grep -v grep|grep ssh|grep "\-L"|grep $GWY|awk '{print $2}')

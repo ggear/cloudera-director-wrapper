@@ -22,7 +22,7 @@ ssh {
 instances {
   master {
     type: m2.xlarge
-    image: ami-da2cf1ad
+    image: ami-77137c00
     #image: ami-42718735
     tags {
       owner: graham
@@ -34,7 +34,7 @@ instances {
   }
   slave {
     type: m1.large
-    image: ami-da2cf1ad
+    image: ami-77137c00
     #image: ami-42718735
     tags {
       owner: graham
@@ -46,7 +46,7 @@ instances {
   }
   gateway {
     type: m1.small
-    image: ami-da2cf1ad
+    image: ami-77137c00
     #image: ami-42718735
     tags {
       owner: graham
@@ -67,6 +67,11 @@ cloudera-manager {
   enableEnterpriseTrial: true
   repository: "http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cm5/redhat/6/x86_64/cm/5/"
   repositoryKeyUrl: "http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cm5/redhat/6/x86_64/cm/RPM-GPG-KEY-cloudera"
+  configs {
+    CLOUDERA_MANAGER {
+      enable_api_debug: true
+    }
+  }
 }
 
 cluster {
@@ -74,7 +79,18 @@ cluster {
     CDH: 5
   }
   parcelRepositories: ["http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cdh5/parcels/latest/"]
-  services: [HDFS, YARN, ZOOKEEPER, HBASE, KS_INDEXER, SPARK, SOLR, HIVE, IMPALA, OOZIE, SQOOP, FLUME, HUE, SENTRY]
+  services: [HDFS, YARN, ZOOKEEPER, SENTRY, HBASE, KS_INDEXER, SPARK, SOLR, HIVE, IMPALA, OOZIE, SQOOP, FLUME, HUE]
+  #hostname: "10.0.0.114"
+  #username: "admin"
+  #password: "admin"
+  configs {
+      SENTRY {
+        sentry_server_config_safety_valve: "<property><name>sentry.hive.testing.mode</name><value>true</value></property>"
+      }
+      HIVE {
+        hive_server2_sentry_safety_valve: "<property><name>sentry.hive.testing.mode</name><value>true</value></property>"
+      }
+  }
   master-1 {
     count: 1
     minCount: 1
@@ -87,6 +103,7 @@ cluster {
     roles {
       HDFS: [NAMENODE,SECONDARYNAMENODE]
       YARN: [RESOURCEMANAGER, JOBHISTORY]
+      SENTRY: [SENTRY_SERVER]
       HBASE: [MASTER, HBASETHRIFTSERVER, HBASERESTSERVER]
       SPARK: [SPARK_MASTER]
       OOZIE: [OOZIE_SERVER]
@@ -94,7 +111,18 @@ cluster {
       HIVE: [HIVESERVER2, HIVEMETASTORE, WEBHCAT]
       IMPALA: [CATALOGSERVER, STATESTORE]
       HUE: [HUE_SERVER]
-      SENTRY: [SENTRY_SERVER]
+    }
+    configs {
+      SENTRY {
+        SENTRY_SERVER {
+           sentry_server_config_safety_valve: <property><name>sentry.hive.testing.mode</name><value>true</value></property>
+         }
+      }
+      HIVE {
+        HIVESERVER2 {
+          hive_server2_sentry_safety_valve: <property><name>sentry.hive.testing.mode</name><value>true</value></property>
+        }
+      }
     }
   }
   slaves {
@@ -103,7 +131,7 @@ cluster {
     #placementGroup: graham-demo    
     instance: ${instances.slave} {
       tags {
-        group: slave
+        group: worker
       }
     }
     roles {
