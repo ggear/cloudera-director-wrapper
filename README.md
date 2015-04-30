@@ -22,12 +22,14 @@ cd cm_api/python
 python setup.py install
 ```
 
-The Cloudera Director wrapper installation:
+The Cloudera Director wrapper build installation:
 
 ```bash
-mkdir -p /usr/lib64/cloudera-director
-cd /usr/lib64/cloudera-director
-git clone https://github.com/ggear/cloudera-director-wrapper.git wrapper
+git clone https://github.com/ggear/cloudera-director-wrapper.git
+cd cloudera-director-wrapper
+mvn clean install
+mkdir -p /usr/lib64/cloudera-director/wrapper
+tar xvzf target/cloudera-director-wrapper-*-bin.tar.gz -C /usr/lib64/cloudera-director/wrapper --strip 1
 ```
 
 The shell environment should include home directories pointing to the Director and Wrapper installs: 
