@@ -1,6 +1,6 @@
 # Cloudera Director Wrapper
 
-Provide a thin, convenience wrapper around Cloudera Director
+Provide a thin, convenience wrapper around the Cloudera Director Client
 
 ## Requirements
 
