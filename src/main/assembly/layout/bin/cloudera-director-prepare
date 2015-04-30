@@ -2,5 +2,10 @@
 
 source "$DIRECTOR_CLIENT_WRAPPER_HOME"/bin/cloudera-director.env
 
-su -c "hadoop fs -mkdir -p /user/$USER" hdfs
-su -c "hadoop fs -chown -R root /user/$USER" hdfs
+su -c "hdfs dfs -mkdir -p /user/$USER" hdfs
+su -c "hdfs dfs -chmod -R 771 /user/$USER" hdfs
+su -c "hdfs dfs -chown -R $USER:$USER /user/$USER" hdfs
+
+su -c "hdfs dfs -mkdir -p /user/hive/warehouse" hdfs
+su -c "hdfs dfs -chmod -R 771 /user/hive/warehouse" hdfs
+su -c "hdfs dfs -chown -R hive:hive /user/hive/warehouse" hdfs

@@ -57,7 +57,7 @@ cloudera-director bootstrap
 cloudera-director client
 ```
 
-or can be run from a remote machine (bootstrap is run as a resumable deamon process):
+or can be run from a remote machine (bootstrap is run as a resumable deamon processs):
 
 ```bash
 cloudera-director-remote my-user@my.host.com clean

@@ -123,6 +123,12 @@ cluster {
           hive_server2_sentry_safety_valve: <property><name>sentry.hive.testing.mode</name><value>true</value></property>
         }
       }
+      IMPALA {
+        impalad_sentry_safety_valve: "<property><name>sentry.hive.testing.mode</name><value>true</value></property>"
+      }
+      HUE {
+        hue_sentry_safety_valve: "<property><name>sentry.hive.testing.mode</name><value>true</value></property>"
+      }
     }
   }
   slaves {
