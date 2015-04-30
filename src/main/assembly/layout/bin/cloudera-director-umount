@@ -1,5 +1,5 @@
 #!/bin/sh
 
-source "$LAUNCHPAD_WRAPPER_HOME"/bin/cloudera-director.env
+source "$DIRECTOR_CLIENT_WRAPPER_HOME"/bin/cloudera-director.env
 
 umount $CLUSTER_FUSE_MOUNT > /dev/null 2>&1

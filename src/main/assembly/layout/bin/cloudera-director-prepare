@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source "$LAUNCHPAD_WRAPPER_HOME"/bin/cloudera-director.env
+source "$DIRECTOR_CLIENT_WRAPPER_HOME"/bin/cloudera-director.env
 
 su -c "hadoop fs -mkdir -p /user/$USER" hdfs
 su -c "hadoop fs -chown -R root /user/$USER" hdfs

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source "$LAUNCHPAD_WRAPPER_HOME"/bin/cloudera-director.env
+source "$DIRECTOR_CLIENT_WRAPPER_HOME"/bin/cloudera-director.env
 
 if [ $# -ne 2 ]; then
   echo "Usage: [user@]<hostname> <command>"
@@ -18,21 +18,21 @@ LPP="--lp.terminate.assumeYes=true"
 
 if [ "$CMD" = "bootstrap" ]; then
   $SSH "$GWY" \
-    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
-    "[ ! -d \$LAUNCHPAD_WRAPPER_HOME/log ] &&" \
-    "mkdir -p \$LAUNCHPAD_WRAPPER_HOME/log &&" \
+    "[ \${DIRECTOR_CLIENT_WRAPPER_HOME} ] &&" \
+    "[ ! -d \$DIRECTOR_CLIENT_WRAPPER_HOME/log ] &&" \
+    "mkdir -p \$DIRECTOR_CLIENT_WRAPPER_HOME/log &&" \
     "echo \"Starting process in the background\" &&" \
-    "(nohup \$LAUNCHPAD_WRAPPER_HOME/bin/cloudera-director bootstrap $LPP </dev/null >\$LAUNCHPAD_WRAPPER_HOME/log/$LOG 2>&1 &) &&" \
+    "(nohup \$DIRECTOR_CLIENT_WRAPPER_HOME/bin/cloudera-director bootstrap $LPP </dev/null >\$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG 2>&1 &) &&" \
     "sleep 2"
   $SSH -t "$GWY" \
-    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
-    "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
-    "cat \$LAUNCHPAD_WRAPPER_HOME/log/$LOG &&" \
-    "tail -c 0 -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG"
+    "[ \${DIRECTOR_CLIENT_WRAPPER_HOME} ] &&" \
+    "[ -f \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG ] &&" \
+    "cat \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG &&" \
+    "tail -c 0 -f \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG"
 elif [ "$CMD" = "connect" ]; then
   SSH_PORT_FORWARD=$($SSH -t "$GWY" \
-    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
-    "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
+    "[ \${DIRECTOR_CLIENT_WRAPPER_HOME} ] &&" \
+    "[ -f \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG ] &&" \
     "[ -f $CLUSTER_PROPERTIES ] &&" \
     "source $CLUSTER_PROPERTIES &&" \
     "echo -n \"ssh -o StrictHostKeyChecking=no\" &&" \
@@ -42,24 +42,24 @@ elif [ "$CMD" = "connect" ]; then
     "echo -n \" $GWY\"")
   [ -z "$SSH_PORT_FORWARD" ] && \
     [ $($SSH -t "$GWY" \
-      "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
-      "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
-      "\$(grep \"Cluster ready\" \$LAUNCHPAD_WRAPPER_HOME/log/$LOG)"|wc -l) -ge 1 ] && \
+      "[ \${DIRECTOR_CLIENT_WRAPPER_HOME} ] &&" \
+      "[ -f \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG ] &&" \
+      "\$(grep \"Cluster ready\" \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG)"|wc -l) -ge 1 ] && \
     SSH_PORT_FORWARD=$($SSH -t "$GWY" \
-      "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
-      "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
-      "[ \$(grep \"Cluster ready\" \$LAUNCHPAD_WRAPPER_HOME/log/$LOG|wc -l) -ge 1 ] &&" \
-      "\$LAUNCHPAD_WRAPPER_HOME/bin/cloudera-director status $LPP|grep \"* Gateway Shell: \"|cut -c 18-|tr -d '\n'")
+      "[ \${DIRECTOR_CLIENT_WRAPPER_HOME} ] &&" \
+      "[ -f \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG ] &&" \
+      "[ \$(grep \"Cluster ready\" \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG|wc -l) -ge 1 ] &&" \
+      "\$DIRECTOR_CLIENT_WRAPPER_HOME/bin/cloudera-director status $LPP|grep \"* Gateway Shell: \"|cut -c 18-|tr -d '\n'")
   [ -z "$SSH_PORT_FORWARD" ] && \
     [ $($SSH -t "$GWY" \
-      "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
-      "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
-      "\$(grep \"Configuring Cloudera Manager\" \$LAUNCHPAD_WRAPPER_HOME/log/$LOG)"|wc -l) -ge 1 ] && \
+      "[ \${DIRECTOR_CLIENT_WRAPPER_HOME} ] &&" \
+      "[ -f \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG ] &&" \
+      "\$(grep \"Configuring Cloudera Manager\" \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG)"|wc -l) -ge 1 ] && \
     SSH_PORT_FORWARD="ssh -o StrictHostKeyChecking=no -L 7180:"$($SSH -t "$GWY" \
-      "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
-      "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
-      "[ \$(grep \"Configuring Cloudera Manager\" \$LAUNCHPAD_WRAPPER_HOME/log/$LOG|wc -l) -ge 1 ] &&" \
-      "grep \"Normalizing\" \$LAUNCHPAD_WRAPPER_HOME/log/$LOG|awk '{print \$3}'|tr -d '\n'")":7180 $GWY"
+      "[ \${DIRECTOR_CLIENT_WRAPPER_HOME} ] &&" \
+      "[ -f \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG ] &&" \
+      "[ \$(grep \"Configuring Cloudera Manager\" \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG|wc -l) -ge 1 ] &&" \
+      "grep \"Normalizing\" \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG|awk '{print \$3}'|tr -d '\n'")":7180 $GWY"
   [ -z "$SSH_PORT_FORWARD" ] || \
     ( echo "Connecting to bastion host, ctrl-D and crtl-C to quit" && echo $SSH_PORT_FORWARD && $($SSH_PORT_FORWARD &> /dev/null ) )
 elif [ "$CMD" = "terminate" ]; then
@@ -68,33 +68,33 @@ elif [ "$CMD" = "terminate" ]; then
     "echo \"Terminating running processes\" &&" \
     "kill -9 \$(ps aux|grep -v grep|grep java|grep cloudera-director|awk '{print \$2}')"
   $SSH -t "$GWY" \
-    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
-    "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
-    "[ \$(ls \$LAUNCHPAD_WRAPPER_HOME/cfg/.$CFG.* 2>/dev/null|wc -l) -ge 1  ] &&" \
-    "\$LAUNCHPAD_WRAPPER_HOME/bin/cloudera-director terminate $LPP"
-  $LAUNCHPAD_WRAPPER_HOME/bin/cloudera-director-remote $GWY clean
+    "[ \${DIRECTOR_CLIENT_WRAPPER_HOME} ] &&" \
+    "[ -f \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG ] &&" \
+    "[ \$(ls \$DIRECTOR_CLIENT_WRAPPER_HOME/cfg/.$CFG.* 2>/dev/null|wc -l) -ge 1  ] &&" \
+    "\$DIRECTOR_CLIENT_WRAPPER_HOME/bin/cloudera-director terminate $LPP"
+  $DIRECTOR_CLIENT_WRAPPER_HOME/bin/cloudera-director-remote $GWY clean
 elif [ "$CMD" = "clean" ]; then
   $SSH -t "$GWY" \
     "[ \$(ps aux|grep -v grep|grep java|grep cloudera-director|awk '{print \$2}'|wc -l) -ge 1  ] &&" \
     "echo \"Terminating running processes\" &&" \
     "kill -9 \$(ps aux|grep -v grep|grep java|grep cloudera-director|awk '{print \$2}')"
   $SSH -t "$GWY" \
-    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
-    "[ \$(ls \$LAUNCHPAD_WRAPPER_HOME/cfg/.$CFG.* 2>/dev/null|wc -l) -ge 1  ] &&" \
+    "[ \${DIRECTOR_CLIENT_WRAPPER_HOME} ] &&" \
+    "[ \$(ls \$DIRECTOR_CLIENT_WRAPPER_HOME/cfg/.$CFG.* 2>/dev/null|wc -l) -ge 1  ] &&" \
     "echo \"Deleting persisted state\" &&" \
-    "rm -rf \$LAUNCHPAD_WRAPPER_HOME/cfg/.$CFG.*"
+    "rm -rf \$DIRECTOR_CLIENT_WRAPPER_HOME/cfg/.$CFG.*"
   $SSH -t "$GWY" \
-    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
-    "[ \$(ls $LAUNCHPAD_HADOOP_CONF_DIR/* 2>/dev/null|wc -l) -ge 1  ] &&" \
+    "[ \${DIRECTOR_CLIENT_WRAPPER_HOME} ] &&" \
+    "[ \$(ls $DIRECTOR_CLIENT_HADOOP_CONF_DIR/* 2>/dev/null|wc -l) -ge 1  ] &&" \
     "echo \"Deleting hadoop conf\" &&" \
-    "rm -rf $LAUNCHPAD_HADOOP_CONF_DIR"
+    "rm -rf $DIRECTOR_CLIENT_HADOOP_CONF_DIR"
   $SSH -t "$GWY" \
-    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
-    "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
+    "[ \${DIRECTOR_CLIENT_WRAPPER_HOME} ] &&" \
+    "[ -f \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG ] &&" \
     "echo \"Deleting boostrap log\" &&" \
-    "rm -rf \$LAUNCHPAD_WRAPPER_HOME/log"
+    "rm -rf \$DIRECTOR_CLIENT_WRAPPER_HOME/log"
   $SSH -t "$GWY" \
-    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
+    "[ \${DIRECTOR_CLIENT_WRAPPER_HOME} ] &&" \
     "[ -d ~/.cloudera-director ] &&" \
     "echo \"Deleting log\" &&" \
     "rm -rf ~/.cloudera-director"
@@ -103,14 +103,14 @@ elif [ "$CMD" = "clean" ]; then
     kill -9 $(ps aux|grep -v grep|grep ssh|grep "\-L"|grep $GWY|awk '{print $2}')
 elif [ "$CMD" = "client" ]; then
   $SSH -t "$GWY" \
-    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
-    "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
-    "[ \$(grep \"Cluster ready\" \$LAUNCHPAD_WRAPPER_HOME/log/$LOG|wc -l) -ge 1 ] &&" \
-    "\$LAUNCHPAD_WRAPPER_HOME/bin/cloudera-director download-client-config $LPP"
+    "[ \${DIRECTOR_CLIENT_WRAPPER_HOME} ] &&" \
+    "[ -f \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG ] &&" \
+    "[ \$(grep \"Cluster ready\" \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG|wc -l) -ge 1 ] &&" \
+    "\$DIRECTOR_CLIENT_WRAPPER_HOME/bin/cloudera-director download-client-config $LPP"
 else
   $SSH -t "$GWY" \
-    "[ \${LAUNCHPAD_WRAPPER_HOME} ] &&" \
-    "[ -f \$LAUNCHPAD_WRAPPER_HOME/log/$LOG ] &&" \
-    "[ \$(grep \"Cluster ready\" \$LAUNCHPAD_WRAPPER_HOME/log/$LOG|wc -l) -ge 1 ] &&" \
-    "\$LAUNCHPAD_WRAPPER_HOME/bin/cloudera-director $CMD $LPP"
+    "[ \${DIRECTOR_CLIENT_WRAPPER_HOME} ] &&" \
+    "[ -f \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG ] &&" \
+    "[ \$(grep \"Cluster ready\" \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG|wc -l) -ge 1 ] &&" \
+    "\$DIRECTOR_CLIENT_WRAPPER_HOME/bin/cloudera-director $CMD $LPP"
 fi

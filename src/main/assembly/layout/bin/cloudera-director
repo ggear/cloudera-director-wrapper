@@ -1,9 +1,9 @@
 #!/bin/sh
 
-source "$LAUNCHPAD_WRAPPER_HOME"/bin/cloudera-director.env
+source "$DIRECTOR_CLIENT_WRAPPER_HOME"/bin/cloudera-director.env
 
 if [ $# -le 0 ]; then
-  "$LAUNCHPAD_HOME"/bin/cloudera-director
+  "$DIRECTOR_CLIENT_HOME"/bin/cloudera-director
   echo "Wrapper commands: client, connect, clean"
   exit 1
 fi
@@ -12,15 +12,15 @@ CMD="$1"
 shift
 
 if [ "$CMD" = "bootstrap" ]; then
-  rm -rf "$LAUNCHPAD_HOME"/logs/application.log
+  rm -rf "$DIRECTOR_CLIENT_HOME"/logs/application.log
 elif [ "$CMD" = "client" ]; then
   CMD=download-client-config
 fi
 
-"$LAUNCHPAD_HOME/bin/cloudera-director" "$CMD" "$LAUNCHPAD_WRAPPER_HOME"/cfg/aws.conf "$@"
+"$DIRECTOR_CLIENT_HOME/bin/cloudera-director" "$CMD" "$DIRECTOR_CLIENT_WRAPPER_HOME"/cfg/aws.conf "$@"
 
 if [ "$CMD" = "download-client-config" ]; then
-  cp -f "$LAUNCHPAD_WRAPPER_HOME"/etc/* $LAUNCHPAD_HADOOP_CONF_DIR &> /dev/null
-  "$LAUNCHPAD_WRAPPER_HOME"/bin/cloudera-director-prepare
-  "$LAUNCHPAD_WRAPPER_HOME"/bin/cloudera-director-network --host=$(dig +short -x $(grep "Normalizing" $LAUNCHPAD_WRAPPER_HOME/log/*|awk '{print $3}')|tr -d '\n') > $CLUSTER_PROPERTIES
+  cp -f "$DIRECTOR_CLIENT_WRAPPER_HOME"/etc/* $DIRECTOR_CLIENT_HADOOP_CONF_DIR &> /dev/null
+  "$DIRECTOR_CLIENT_WRAPPER_HOME"/bin/cloudera-director-prepare
+  "$DIRECTOR_CLIENT_WRAPPER_HOME"/bin/cloudera-director-network --host=$(dig +short -x $(grep "Normalizing" $DIRECTOR_CLIENT_WRAPPER_HOME/log/*|awk '{print $3}')|tr -d '\n') > $CLUSTER_PROPERTIES
 fi
