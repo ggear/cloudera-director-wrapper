@@ -90,7 +90,7 @@ elif [ "$CMD" = "clean" ]; then
     "rm -rf $DIRECTOR_CLIENT_HADOOP_CONF_DIR"
   $SSH -t "$GWY" \
     "[ \${DIRECTOR_CLIENT_WRAPPER_HOME} ] &&" \
-    "[ -f \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG ] &&" \
+    "[ -d \$DIRECTOR_CLIENT_WRAPPER_HOME/log ] &&" \
     "echo \"Deleting boostrap log\" &&" \
     "rm -rf \$DIRECTOR_CLIENT_WRAPPER_HOME/log"
   $SSH -t "$GWY" \
