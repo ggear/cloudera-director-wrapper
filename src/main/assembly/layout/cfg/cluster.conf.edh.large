@@ -16,7 +16,7 @@ provider {
 
 ssh {
   username: root
-  privateKey: /root/.ssh/director
+  privateKey: /root/.ssh/graham-director
 }
 
 instances {

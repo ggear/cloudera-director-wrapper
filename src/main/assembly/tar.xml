@@ -10,9 +10,7 @@
 			<outputDirectory>/</outputDirectory>
 			<directory>src/main/assembly/layout</directory>
 			<excludes>
-				<exclude>bin/whirr</exclude>
-				<exclude>**/*.sh</exclude>
-				<exclude>**/*.gitignore</exclude>
+				<exclude>bin/*</exclude>
 			</excludes>
 			<fileMode>0644</fileMode>
 			<directoryMode>0755</directoryMode>
@@ -21,10 +19,9 @@
 			<outputDirectory>/</outputDirectory>
 			<directory>src/main/assembly/layout</directory>
 			<includes>
-				<include>bin/whirr</include>
-				<include>**/*.sh</include>
+				<include>bin/*</include>
 			</includes>
-			<fileMode>0700</fileMode>
+			<fileMode>0744</fileMode>
 		</fileSet>
 	</fileSets>
 </assembly>
