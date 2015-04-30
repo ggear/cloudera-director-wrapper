@@ -12,7 +12,7 @@ GWY="$1"
 CMD="$2"
 MGR="7180"
 SSH="ssh -q"
-CFG="aws.conf"
+CFG="cluster.conf"
 LOG="bootstrap.log"
 LPP="--lp.terminate.assumeYes=true"
 

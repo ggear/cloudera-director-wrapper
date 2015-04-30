@@ -17,7 +17,7 @@ elif [ "$CMD" = "client" ]; then
   CMD=download-client-config
 fi
 
-"$DIRECTOR_CLIENT_HOME/bin/cloudera-director" "$CMD" "$DIRECTOR_CLIENT_WRAPPER_HOME"/cfg/aws.conf "$@"
+"$DIRECTOR_CLIENT_HOME/bin/cloudera-director" "$CMD" "$DIRECTOR_CLIENT_WRAPPER_HOME"/cfg/cluster.conf "$@"
 
 if [ "$CMD" = "download-client-config" ]; then
   cp -f "$DIRECTOR_CLIENT_WRAPPER_HOME"/etc/* $DIRECTOR_CLIENT_HADOOP_CONF_DIR &> /dev/null
