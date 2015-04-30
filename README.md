@@ -25,13 +25,14 @@ python setup.py install
 The Cloudera Director wrapper installation:
 
 ```bash
-mkdir -p /opt/director
-git clone https://github.com/ggear/launchpad-wrapper.git cloudera-director-wrapper
+mkdir -p /usr/lib64/cloudera-director
+cd /usr/lib64/cloudera-director
+git clone https://github.com/ggear/launchpad-wrapper.git wrapper
 ```
 
 The shell environment should include home directories pointing to the Director and Wrapper installs: 
 
 ```bash
 export LAUNCHPAD_HOME=/usr/lib64/cloudera-director/client
-export LAUNCHPAD_WRAPPER_HOME=/opt/director/cloudera-director-wrapper
+export LAUNCHPAD_WRAPPER_HOME=/usr/lib64/cloudera-director/wrapper
 ```
