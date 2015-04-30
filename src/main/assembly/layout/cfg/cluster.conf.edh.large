@@ -6,7 +6,7 @@ provider {
   secretAccessKey: ${?CLOUD_PROVIDER_KEY}
   publishAccessKeys: true
   region: eu-west-1
-  keyName: graham-director
+  keyName: graham-launchpad
   subnetId: subnet-8239ece7
   securityGroupsIds: sg-4b71a02e
   instanceNamePrefix: graham-demo
@@ -16,7 +16,7 @@ provider {
 
 ssh {
   username: root
-  privateKey: /root/.ssh/graham-director
+  privateKey: /root/.ssh/launchpad
 }
 
 instances {
