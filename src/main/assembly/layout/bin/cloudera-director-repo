@@ -34,13 +34,14 @@ mkdir -p $DIR_BASE_REPO
 mkdir -p $DIR_BASE_TMP
 
 mirror_repo cloudera-cdh5 cdh5 5 http://archive-primary.cloudera.com redhat/6/x86_64/cdh $DIR_BASE_REPO $DIR_BASE_TMP
-mirror_repo cloudera-cdh4 cdh4 4 http://archive-primary.cloudera.com redhat/6/x86_64/cdh $DIR_BASE_REPO $DIR_BASE_TMP
+#mirror_repo cloudera-cdh4 cdh4 4 http://archive-primary.cloudera.com redhat/6/x86_64/cdh $DIR_BASE_REPO $DIR_BASE_TMP
 mirror_repo cloudera-manager5 cm5 5 http://archive-primary.cloudera.com redhat/6/x86_64/cm $DIR_BASE_REPO $DIR_BASE_TMP
-mirror_repo cloudera-manager4 cm4 4 http://archive-primary.cloudera.com redhat/6/x86_64/cm $DIR_BASE_REPO $DIR_BASE_TMP
-mirror_repo cloudera-impala impala 1 http://archive-primary.cloudera.com redhat/6/x86_64/impala $DIR_BASE_REPO $DIR_BASE_TMP
-mirror_repo cloudera-search search 1 http://archive-primary.cloudera.com redhat/6/x86_64/search $DIR_BASE_REPO $DIR_BASE_TMP
-mirror_repo cloudera-spark spark 1 http://archive-primary.cloudera.com redhat/6/x86_64/spark $DIR_BASE_REPO $DIR_BASE_TMP
-mirror_repo cloudera-accumulo accumulo 4 http://archive-primary.cloudera.com redhat/6/x86_64/cdh $DIR_BASE_REPO $DIR_BASE_TMP
+#mirror_repo cloudera-manager4 cm4 4 http://archive-primary.cloudera.com redhat/6/x86_64/cm $DIR_BASE_REPO $DIR_BASE_TMP
+#mirror_repo cloudera-impala impala 1 http://archive-primary.cloudera.com redhat/6/x86_64/impala $DIR_BASE_REPO $DIR_BASE_TMP
+#mirror_repo cloudera-search search 1 http://archive-primary.cloudera.com redhat/6/x86_64/search $DIR_BASE_REPO $DIR_BASE_TMP
+#mirror_repo cloudera-spark spark 1 http://archive-primary.cloudera.com redhat/6/x86_64/spark $DIR_BASE_REPO $DIR_BASE_TMP
+mirror_repo cloudera-kafka kafka 1 http://archive-primary.cloudera.com redhat/6/x86_64/kafka $DIR_BASE_REPO $DIR_BASE_TMP
+#mirror_repo cloudera-accumulo accumulo 4 http://archive-primary.cloudera.com redhat/6/x86_64/cdh $DIR_BASE_REPO $DIR_BASE_TMP
 mirror_repo cloudera-sqoop-connectors sqoop-connectors 1 http://archive-primary.cloudera.com redhat/6/x86_64/sqoop $DIR_BASE_REPO $DIR_BASE_TMP
 mirror_repo cloudera-director director 1 http://archive-primary.cloudera.com redhat/6/x86_64/director $DIR_BASE_REPO $DIR_BASE_TMP
 
