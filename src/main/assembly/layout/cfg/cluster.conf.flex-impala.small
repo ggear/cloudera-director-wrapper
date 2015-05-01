@@ -78,24 +78,27 @@ cluster {
   products {
     CDH: 5
   }
-  parcelRepositories: ["http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cdh5/parcels/latest/"]
+  parcelRepositories: ["http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cdh5/parcels/latest/",
+    "http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cdh5/parcels/5.4.0/", 
+    "http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cdh5/parcels/5.3.3/", 
+    "http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cdh5/parcels/5.3.2/"]
   services: [HDFS, YARN, ZOOKEEPER, SENTRY, HBASE, KS_INDEXER, SPARK, SOLR, HIVE, IMPALA, OOZIE, SQOOP, FLUME, HUE]
   #hostname: "10.0.0.114"
   #username: "admin"
   #password: "admin"
   configs {
-      SENTRY {
-        sentry_server_config_safety_valve: "<property><name>sentry.hive.testing.mode</name><value>true</value></property>"
-      }
-      HIVE {
-        hive_server2_sentry_safety_valve: "<property><name>sentry.hive.testing.mode</name><value>true</value></property>"
-      }
-      IMPALA {
-        impalad_sentry_safety_valve: "<property><name>sentry.hive.testing.mode</name><value>true</value></property>"
-      }
-      HUE {
-        hue_sentry_safety_valve: "<property><name>sentry.hive.testing.mode</name><value>true</value></property>"
-      }
+    SENTRY {
+      sentry_server_config_safety_valve: "<property><name>sentry.hive.testing.mode</name><value>true</value></property>"
+    }
+    HIVE {
+      hive_server2_sentry_safety_valve: "<property><name>sentry.hive.testing.mode</name><value>true</value></property>"
+    }
+    IMPALA {
+      impalad_sentry_safety_valve: "<property><name>sentry.hive.testing.mode</name><value>true</value></property>"
+    }
+    HUE {
+      hue_sentry_safety_valve: "<property><name>sentry.hive.testing.mode</name><value>true</value></property>"
+    }
   }
   master-1 {
     count: 1
@@ -115,18 +118,6 @@ cluster {
       HIVE: [HIVESERVER2, HIVEMETASTORE, WEBHCAT]
       IMPALA: [CATALOGSERVER, STATESTORE]
       HUE: [HUE_SERVER]
-    }
-    configs {
-      SENTRY {
-        SENTRY_SERVER {
-           sentry_server_config_safety_valve: <property><name>sentry.hive.testing.mode</name><value>true</value></property>
-         }
-      }
-      HIVE {
-        HIVESERVER2 {
-          hive_server2_sentry_safety_valve: <property><name>sentry.hive.testing.mode</name><value>true</value></property>
-        }
-      }
     }
   }
   slaves {
