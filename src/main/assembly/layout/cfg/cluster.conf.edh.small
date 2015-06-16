@@ -120,7 +120,6 @@ cluster {
       SQOOP: [SQOOP_SERVER]
       HIVE: [HIVESERVER2, HIVEMETASTORE, WEBHCAT]
       IMPALA: [CATALOGSERVER, STATESTORE]
-      KAFKA: [KAFKA_BROKER]
       HUE: [HUE_SERVER]
     }
   }
@@ -142,6 +141,7 @@ cluster {
       KS_INDEXER: [HBASE_INDEXER]
       SPARK: [SPARK_WORKER]
       IMPALA: [IMPALAD]
+      KAFKA: [KAFKA_BROKER]
       FLUME: [AGENT]
     }
   }

@@ -14,13 +14,17 @@ Options:
                                          Defaults to 'admin'
 --user=<cm-server-user-password>         The Cloudera Manager user password
                                          Defaults to 'admin'
+--cluster_node_user=<cluster-node-user>  The local user able to connect to each cluster node
+                                         Defaults to 'root'
+--cluster_node_key=<cluster-node-key>    The key path which enables connection to each cluster node
+                                         Defaults to '/root/.ssh/launchpad'
 --cluster_name=<cluster-name>            Name the cluster to reflect on
                                          Defaults to the zeroth cluster defined                                   
 --service_role_name=<service-role-type>  Filter to apply to service and role name
-                                         Defaults all roles defined in the cluster                                   
+                                         Defaults to all roles defined in the cluster                                   
 --random_index=<true|false>              For parameters that are multi-value, define singular value
                                          via a random index rather than the zeroth element
-                                         Defaults 'false'
+                                         Defaults to 'false'
 """
 
 import getopt
@@ -44,6 +48,14 @@ def do_print_header():
 
 def do_print_footer():
     print '###############################################################################'
+
+def do_print_line_item_manual(service_name, role_name, keys, values):
+  service_role_name = service_name.upper() + '_' + role_name.upper();
+  print '# ' + service_role_name
+  for key, value in zip(keys, values):
+      print service_role_name + '_' + key + '=' + value
+  print ''    
+  return True
 
 def do_print_line_item(api, service, service_role_name_filter, random_index, service_name, role_name, role_port_name, hosts, ports):
   service_role_name = service_name.upper() + '_' + role_name.upper();
@@ -69,7 +81,7 @@ def do_print_line_item(api, service, service_role_name_filter, random_index, ser
       return True
   return False
                     
-def do_call(host, port, version, user, password, cluster_name, service_role_name, random_index):
+def do_call(host, port, version, user, password, cluster_name, cluster_node_user, cluster_node_key, service_role_name, random_index):
     api = ApiResource(host, port, user, password, False, version);
     for cluster in api.get_all_clusters():
       if cluster_name is None:
@@ -80,6 +92,7 @@ def do_call(host, port, version, user, password, cluster_name, service_role_name
         print >> sys.stderr, "Cloud not find cluster: " + cluster_name
         return -2;
     do_print_header()
+    do_print_line_item_manual('CLUSTER', 'NODE', ['USER', 'KEY'], [cluster_node_user, cluster_node_key])
     do_print_line_item(api, None, service_role_name, random_index, 'MANAGER', 'SERVER', None, [host], [str(port)])
     do_print_line_item(api, api.get_cloudera_manager().get_service(), service_role_name, random_index, 'MANAGER', 'NAVIGATORMETASERVER', 'navigator_server_port', [], [])
     for service in cluster.get_all_services():
@@ -87,6 +100,7 @@ def do_call(host, port, version, user, password, cluster_name, service_role_name
       do_print_line_item(api, service, service_role_name, random_index, 'HUE', 'HUE_SERVER', 'hue_http_port', [], [])
       do_print_line_item(api, service, service_role_name, random_index, 'HIVE', 'HIVESERVER2', 'hs2_thrift_address_port', [], [])
       do_print_line_item(api, service, service_role_name, random_index, 'IMPALA', 'IMPALAD', 'beeswax_port', [], [])
+      do_print_line_item(api, service, service_role_name, random_index, 'FLUME', 'AGENT', 'agent_http_port', [], [])
     do_print_footer()
 
 def usage():
@@ -105,10 +119,12 @@ def main(argv):
     user = 'admin'
     password = 'admin'
     cluster_name = None
+    cluster_node_user = 'root'
+    cluster_node_key = '/root/.ssh/launchpad'
     service_role_name = None
     random_index = False
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "h", ["help", "host=", "port=", "version=", "user=", "password=", "random_index=", "cluster_name=", "service_role_name="])
+        opts, args = getopt.getopt(sys.argv[1:], "h", ["help", "host=", "port=", "version=", "user=", "password=", "random_index=", "cluster_name=", "cluster_node_user=", "cluster_node_key=", "service_role_name="])
     except getopt.GetoptError, err:
         print >> sys.stderr, err
         usage()
@@ -131,13 +147,17 @@ def main(argv):
             random_index = value;
         elif option in ("--cluster_name"):
             cluster_name = value;
+        elif option in ("--cluster_node_user"):
+            cluster_node_user = value;
+        elif option in ("--cluster_node_key"):
+            cluster_node_key = value;
         elif option in ("--service_role_name"):
             service_role_name = value;
         else:
             print >> sys.stderr, "Unknown option or flag: " + option
             usage()
             return -1
-    do_call(host, port, version, user, password, cluster_name, service_role_name, random_index)
+    do_call(host, port, version, user, password, cluster_name, cluster_node_user, cluster_node_key, service_role_name, random_index)
     return 0
 
 if __name__ == '__main__':

@@ -148,7 +148,6 @@ cluster {
       SQOOP: [SQOOP_SERVER]
       HIVE: [HIVESERVER2, HIVEMETASTORE, WEBHCAT]
       IMPALA: [CATALOGSERVER, STATESTORE]
-      KAFKA: [KAFKA_BROKER]
       HUE: [HUE_SERVER]
     }
   }
@@ -186,6 +185,7 @@ cluster {
       HBASE: [GATEWAY]
       SOLR: [GATEWAY]
       HIVE: [GATEWAY]
+      KAFKA: [KAFKA_BROKER]
       FLUME: [AGENT]
     }
   }
