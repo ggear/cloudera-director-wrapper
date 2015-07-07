@@ -77,6 +77,7 @@ def do_print_line_item(api, service, service_role_name_filter, random_index, ser
       print service_role_name + '_PORT=' + ports[index]
       print service_role_name + '_HOSTS=' + ",".join(hosts)
       print service_role_name + '_PORTS=' + ",".join(ports)
+      print service_role_name + '_HOSTS_AND_PORTS=' + ','.join([host + ':' + port for host, port in zip(hosts, ports)])
       print ''
       return True
   return False
@@ -101,6 +102,8 @@ def do_call(host, port, version, user, password, cluster_name, cluster_node_user
       do_print_line_item(api, service, service_role_name, random_index, 'HIVE', 'HIVESERVER2', 'hs2_thrift_address_port', [], [])
       do_print_line_item(api, service, service_role_name, random_index, 'IMPALA', 'IMPALAD', 'beeswax_port', [], [])
       do_print_line_item(api, service, service_role_name, random_index, 'FLUME', 'AGENT', 'agent_http_port', [], [])
+      do_print_line_item(api, service, service_role_name, random_index, 'KAFKA', 'KAFKA_BROKER', 'port', [], [])
+      do_print_line_item(api, service, service_role_name, random_index, 'ZOOKEEPER', 'SERVER', 'clientPort', [], [])
     do_print_footer()
 
 def usage():
