@@ -76,12 +76,12 @@ cloudera-manager {
 
 cluster {
   products {
-    CDH: 5.4.3
+    CDH: 5.4.4
     KAFKA: 0
   }
   parcelRepositories: [
-    "http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cdh5/parcels/5.4.3/", 
-    "http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cdh5/parcels/5.4.2/",
+    "http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cdh5/parcels/5.4.4/", 
+    "http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cdh5/parcels/5.4.3/",
     "http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/kafka/parcels/1.3.0/"]
   services: [HDFS, YARN, ZOOKEEPER, SENTRY, HIVE, IMPALA, OOZIE, SQOOP, FLUME, KAFKA, HUE]
   #hostname: "10.0.0.114"
