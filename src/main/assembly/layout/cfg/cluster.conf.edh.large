@@ -82,7 +82,7 @@ cluster {
   parcelRepositories: [
     "http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cdh5/parcels/5.4.4/", 
     "http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/cdh5/parcels/5.4.3/",
-    "http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/kafka/parcels/1.3.0/"]
+    "http://ec2-54-77-57-3.eu-west-1.compute.amazonaws.com/tmph3l7m2vv103/cloudera-repos/kafka/parcels/1.3.1/"]
   services: [HDFS, YARN, ZOOKEEPER, SENTRY, HBASE, KS_INDEXER, SPARK, SOLR, HIVE, IMPALA, OOZIE, SQOOP, FLUME, KAFKA, HUE]
   #hostname: "10.0.0.114"
   #username: "admin"
@@ -187,6 +187,13 @@ cluster {
       HIVE: [GATEWAY]
       KAFKA: [KAFKA_BROKER]
       FLUME: [AGENT]
+    }
+    configs {
+      KAFKA {
+        KAFKA_BROKER {
+          broker_max_heap_size: 512
+        }
+      }
     }
   }
 }
