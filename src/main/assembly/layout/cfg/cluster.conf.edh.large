@@ -22,7 +22,7 @@ ssh {
 instances {
   master {
     type: m2.xlarge
-    image: ami-77137c00
+    image: ami-bebfe2c9
     #image: ami-42718735
     tags {
       owner: graham
