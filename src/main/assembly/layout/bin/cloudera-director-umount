@@ -2,4 +2,4 @@
 
 source "$DIRECTOR_CLIENT_WRAPPER_HOME"/bin/cloudera-director.env
 
-umount $CLUSTER_FUSE_MOUNT > /dev/null 2>&1
+sudo umount $CLUSTER_FUSE_MOUNT > /dev/null 2>&1

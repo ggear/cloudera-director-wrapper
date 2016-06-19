@@ -1,51 +1,64 @@
 #!/bin/sh
 
-ALL_PARCELS=true
+set -x
 
-DIR_BASE=/var/www/html/tmph3l7m2vv103
-DIR_BASE_REPO=$DIR_BASE/cloudera-repos
-DIR_BASE_TMP=/tmp/cloudera-repo
+DIR_GROUP="repos"
+DIR_BASE="/var/www/html/tmph3l7m2vv103"
+DIR_BASE_REPO="$DIR_BASE/sbin"
+DIR_BASE_TMP="/tmp/cloudera-repo"
+DIRS_FLUSH="$DIR_BASE/apps"
 
 mirror_repo() {
-  mkdir -p $6/$2/$5/$3/RPMS
+  mkdir -p $6/$2/$5/$8/RPMS
   cd $6/$2/$5
   wget -e robots=off -N $4/$2/$5/RPM-GPG-KEY-cloudera
   cd $6
-  wget -e robots=off -N -np -nH -r -l 4 -A noarch.rpm,64.rpm,gz,asc,xml $4/$2/$5/
-  wget -e robots=off -N -np -nH -r -l 2 -A rpm $4/$2/$5/$3/RPMS/
-  [ ! -L $7/$1 ] && ln -s $6/$2/$5/$3 $7/$1
+  wget robots=off -N -np -nH -r -l 1 --cut-dirs=$9 -A rpm $4/$2/$5/$8/RPMS/noarch
+  wget robots=off -N -np -nH -r -l 1 --cut-dirs=$9 -A rpm $4/$2/$5/$8/RPMS/x86_64
+  wget robots=off -N -np -nH -r -l 1 --cut-dirs=$9 -A gz,asc,xml $4/$2/$5/$8/repodata
+  [ ! -L $7/$1 ] && ln -s $6/$2/$5/$8 $7/$1
   cd $7/$1
   createrepo .
   if [ $(curl -o /dev/null --silent --head --write-out '%{http_code}\n' $4/$2/parcels/) -eq "200" ]; then
     mkdir -p $6/$2/parcels
     cd $6
-    rm -rf $2/parcels/latest
-    if $ALL_PARCELS ; then
-      wget -e robots=off -N -np -nH -r -l 2 -I "/*/*/[0-9].[0-9]*" -A json,el6.parcel $4/$2/parcels/
-    else
-      wget -e robots=off -N -np -nH -r -l 2 -A json,el6.parcel $4/$2/parcels/latest/
-      mv $6/$2/parcels/latest $6/$2/parcels/$3      
-    fi    
-    ln -s $6/$(dirname $(ls -dt $2/parcels/*/*.parcel | head -n 1)) $2/parcels/latest
+    wget robots=off -N -np -nH -r -l 1 --cut-dirs=$9 -A ${10}.parcel,${10}.parcel.sha1,manifest.json $4/$2/parcels/$8
   fi
 }
 
 mkdir -p $DIR_BASE_REPO
 mkdir -p $DIR_BASE_TMP
 
-mirror_repo cloudera-cdh5 cdh5 5 http://archive-primary.cloudera.com redhat/6/x86_64/cdh $DIR_BASE_REPO $DIR_BASE_TMP
-#mirror_repo cloudera-cdh4 cdh4 4 http://archive-primary.cloudera.com redhat/6/x86_64/cdh $DIR_BASE_REPO $DIR_BASE_TMP
-mirror_repo cloudera-manager5 cm5 5 http://archive-primary.cloudera.com redhat/6/x86_64/cm $DIR_BASE_REPO $DIR_BASE_TMP
-#mirror_repo cloudera-manager4 cm4 4 http://archive-primary.cloudera.com redhat/6/x86_64/cm $DIR_BASE_REPO $DIR_BASE_TMP
-#mirror_repo cloudera-impala impala 1 http://archive-primary.cloudera.com redhat/6/x86_64/impala $DIR_BASE_REPO $DIR_BASE_TMP
-#mirror_repo cloudera-search search 1 http://archive-primary.cloudera.com redhat/6/x86_64/search $DIR_BASE_REPO $DIR_BASE_TMP
-#mirror_repo cloudera-spark spark 1 http://archive-primary.cloudera.com redhat/6/x86_64/spark $DIR_BASE_REPO $DIR_BASE_TMP
-mirror_repo cloudera-kafka kafka 1 http://archive-primary.cloudera.com redhat/6/x86_64/kafka $DIR_BASE_REPO $DIR_BASE_TMP
-#mirror_repo cloudera-accumulo accumulo 4 http://archive-primary.cloudera.com redhat/6/x86_64/cdh $DIR_BASE_REPO $DIR_BASE_TMP
-mirror_repo cloudera-sqoop-connectors sqoop-connectors 1 http://archive-primary.cloudera.com redhat/6/x86_64/sqoop $DIR_BASE_REPO $DIR_BASE_TMP
-mirror_repo cloudera-director director 1 http://archive-primary.cloudera.com redhat/6/x86_64/director $DIR_BASE_REPO $DIR_BASE_TMP
+#mirror_repo cloudera-manager5 cm5 5 http://archive-primary.cloudera.com redhat/7/x86_64/cm $DIR_BASE_REPO $DIR_BASE_TMP 5.5.3 0 ""
+#mirror_repo cloudera-manager5 cm5 5 http://archive-primary.cloudera.com redhat/7/x86_64/cm $DIR_BASE_REPO $DIR_BASE_TMP 5.6.0 0 ""
+#mirror_repo cloudera-manager5 cm5 5 http://archive-primary.cloudera.com redhat/7/x86_64/cm $DIR_BASE_REPO $DIR_BASE_TMP 5.7.0 0 ""
+#mirror_repo cloudera-manager5 cm5 5 http://archive-primary.cloudera.com redhat/7/x86_64/cm $DIR_BASE_REPO $DIR_BASE_TMP 5.7.1 0 ""
 
-find $DIR_BASE -type f -exec chmod -v 644 {} \;
-find $DIR_BASE -type d -exec chmod -v 755 {} \;
+#mirror_repo cloudera-director director 1 http://archive-primary.cloudera.com redhat/7/x86_64/director $DIR_BASE_REPO $DIR_BASE_TMP 2.0.0 0 ""
+
+#mirror_repo cloudera-cdh5 cdh5 5 http://archive-primary.cloudera.com redhat/7/x86_64/cdh $DIR_BASE_REPO $DIR_BASE_TMP 5.5.1 0 "el7"
+#mirror_repo cloudera-cdh5 cdh5 5 http://archive-primary.cloudera.com redhat/7/x86_64/cdh $DIR_BASE_REPO $DIR_BASE_TMP 5.5.2 0 "el7"
+#mirror_repo cloudera-cdh5 cdh5 5 http://archive-primary.cloudera.com redhat/7/x86_64/cdh $DIR_BASE_REPO $DIR_BASE_TMP 5.6.0 0 "el7"
+#mirror_repo cloudera-cdh5 cdh5 5 http://archive-primary.cloudera.com redhat/7/x86_64/cdh $DIR_BASE_REPO $DIR_BASE_TMP 5.7.0 0 "el7"
+#mirror_repo cloudera-cdh5 cdh5 5 http://archive-primary.cloudera.com redhat/7/x86_64/cdh $DIR_BASE_REPO $DIR_BASE_TMP 5.7.1 0 "el7"
+
+#mirror_repo cloudera-recordservice recordservice 1 http://archive.cloudera.com/beta redhat/7/x86_64/recordservice $DIR_BASE_REPO $DIR_BASE_TMP 0.3.0 1 "el7"
+
+#mirror_repo cloudera-kudu kudu 1 http://archive.cloudera.com/beta redhat/7/x86_64/kudu $DIR_BASE_REPO $DIR_BASE_TMP 0.7.0 1
+#mirror_repo cloudera-kudu kudu 1 http://archive.cloudera.com/beta redhat/7/x86_64/kudu $DIR_BASE_REPO $DIR_BASE_TMP 0.7.1 1
+#mirror_repo cloudera-kudu kudu 1 http://archive.cloudera.com/beta redhat/7/x86_64/kudu $DIR_BASE_REPO $DIR_BASE_TMP 0.8.0 1
+#mirror_repo cloudera-kudu kudu 1 http://archive.cloudera.com/beta redhat/7/x86_64/kudu $DIR_BASE_REPO $DIR_BASE_TMP 0.9.0 1
+
+#mirror_repo cloudera-kafka kafka 1 http://archive-primary.cloudera.com redhat/7/x86_64/kafka $DIR_BASE_REPO $DIR_BASE_TMP 1.4.0 0 "el7"
+#mirror_repo cloudera-kafka kafka 1 http://archive-primary.cloudera.com redhat/7/x86_64/kafka $DIR_BASE_REPO $DIR_BASE_TMP 2.0.0 0 "el7"
+#mirror_repo cloudera-kafka kafka 1 http://archive-primary.cloudera.com redhat/7/x86_64/kafka $DIR_BASE_REPO $DIR_BASE_TMP 2.0.1 0 "el7"
+
+#mirror_repo cloudera-sqoop-connectors sqoop-connectors 1 http://archive-primary.cloudera.com redhat/7/x86_64/sqoop $DIR_BASE_REPO $DIR_BASE_TMP 1.5.9 0 "el7"
+
+rm -rf $DIRS_FLUSH
+mkdir -p $DIRS_FLUSH
+chgrp -R $DIR_GROUP $DIR_BASE
+find $DIR_BASE -type f -exec chmod -v 664 {} \;
+find $DIR_BASE -type d -exec chmod -v 775 {} \;
 
 rm -rf $DIR_BASE_TMP/cloudera-*

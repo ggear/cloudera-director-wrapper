@@ -118,12 +118,12 @@ def main(argv):
     setup_logging(logging.INFO)
     host = 'localhost'
     port = 7180
-    version = 10  # Do not use api_client.API_CURRENT_VERSION, it is often +1 current production version
+    version = 12  # Do not use api_client.API_CURRENT_VERSION, it is often +1 current production version
     user = 'admin'
     password = 'admin'
     cluster_name = None
-    cluster_node_user = 'root'
-    cluster_node_key = '/root/.ssh/launchpad'
+    cluster_node_user = 'ec2-user'
+    cluster_node_key = '/home/graham/.ssh/id_rsa'
     service_role_name = None
     random_index = False
     try:

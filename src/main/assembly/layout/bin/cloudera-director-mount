@@ -2,8 +2,8 @@
 
 source "$DIRECTOR_CLIENT_WRAPPER_HOME"/bin/cloudera-director.env
 
-mkdir -fp $CLUSTER_FUSE_MOUNT > /dev/null 2>&1
+sudo mkdir -p $CLUSTER_FUSE_MOUNT > /dev/null 2>&1
 
-umount $CLUSTER_FUSE_MOUNT > /dev/null 2>&1
-hadoop-fuse-dfs $CLUSTER_NAMENODE $CLUSTER_FUSE_MOUNT > /dev/null
+sudo umount $CLUSTER_FUSE_MOUNT > /dev/null 2>&1
+sudo hadoop-fuse-dfs $CLUSTER_NAMENODE $CLUSTER_FUSE_MOUNT > /dev/null
 
