@@ -48,6 +48,7 @@ mkdir -p $DIR_BASE_TMP
 #mirror_repo cloudera-kudu kudu 1 http://archive.cloudera.com/beta redhat/7/x86_64/kudu $DIR_BASE_REPO $DIR_BASE_TMP 0.7.1 1
 #mirror_repo cloudera-kudu kudu 1 http://archive.cloudera.com/beta redhat/7/x86_64/kudu $DIR_BASE_REPO $DIR_BASE_TMP 0.8.0 1
 #mirror_repo cloudera-kudu kudu 1 http://archive.cloudera.com/beta redhat/7/x86_64/kudu $DIR_BASE_REPO $DIR_BASE_TMP 0.9.0 1
+#mirror_repo cloudera-kudu kudu 1 http://archive.cloudera.com/beta redhat/7/x86_64/kudu $DIR_BASE_REPO $DIR_BASE_TMP 0.9.1 1
 
 #mirror_repo cloudera-kafka kafka 1 http://archive-primary.cloudera.com redhat/7/x86_64/kafka $DIR_BASE_REPO $DIR_BASE_TMP 1.4.0 0 "el7"
 #mirror_repo cloudera-kafka kafka 1 http://archive-primary.cloudera.com redhat/7/x86_64/kafka $DIR_BASE_REPO $DIR_BASE_TMP 2.0.0 0 "el7"
