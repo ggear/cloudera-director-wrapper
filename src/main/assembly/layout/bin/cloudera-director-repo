@@ -35,6 +35,7 @@ mkdir -p $DIR_BASE_TMP
 #mirror_repo cloudera-manager5 cm5 5 http://archive-primary.cloudera.com redhat/7/x86_64/cm $DIR_BASE_REPO $DIR_BASE_TMP 5.7.1 0 ""
 
 #mirror_repo cloudera-director director 1 http://archive-primary.cloudera.com redhat/7/x86_64/director $DIR_BASE_REPO $DIR_BASE_TMP 2.0.0 0 ""
+#mirror_repo cloudera-director director 1 http://archive-primary.cloudera.com redhat/7/x86_64/director $DIR_BASE_REPO $DIR_BASE_TMP 2.1.0 0 ""
 
 #mirror_repo cloudera-cdh5 cdh5 5 http://archive-primary.cloudera.com redhat/7/x86_64/cdh $DIR_BASE_REPO $DIR_BASE_TMP 5.5.1 0 "el7"
 #mirror_repo cloudera-cdh5 cdh5 5 http://archive-primary.cloudera.com redhat/7/x86_64/cdh $DIR_BASE_REPO $DIR_BASE_TMP 5.5.2 0 "el7"
