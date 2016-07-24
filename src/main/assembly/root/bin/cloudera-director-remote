@@ -59,7 +59,7 @@ elif [ "$CMD" = "connect" ]; then
       "[ \${DIRECTOR_CLIENT_WRAPPER_HOME} ] &&" \
       "[ -f \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG ] &&" \
       "[ \$(grep \"Configuring Cloudera Manager\" \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG|wc -l) -ge 1 ] &&" \
-      "grep \"Normalizing\" \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG|awk '{print \$3}'|tr -d '\n'")":7180 $GWY"
+      "grep -m 1 \"Inspecting\" \$DIRECTOR_CLIENT_WRAPPER_HOME/log/$LOG|awk '{print \$5}'|tr -d '\n'")":7180 $GWY"
   [ -z "$SSH_PORT_FORWARD" ] || \
     ( echo "Connecting to bastion host, ctrl-D and crtl-C to quit" && echo $SSH_PORT_FORWARD && $($SSH_PORT_FORWARD &> /dev/null ) )
 elif [ "$CMD" = "terminate" ]; then

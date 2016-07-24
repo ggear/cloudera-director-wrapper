@@ -22,5 +22,5 @@ fi
 if [ "$CMD" = "download-client-config" ]; then
   sudo cp -f "$DIRECTOR_CLIENT_WRAPPER_HOME"/etc/* $DIRECTOR_CLIENT_HADOOP_CONF_DIR &> /dev/null
   "$DIRECTOR_CLIENT_WRAPPER_HOME"/bin/cloudera-director-prepare
-  "$DIRECTOR_CLIENT_WRAPPER_HOME"/bin/cloudera-director-network --host=$(dig +short -x $(grep "Inspecting" $DIRECTOR_CLIENT_WRAPPER_HOME/log/*|awk '{print $5}')|tr -d '\n') > $CLUSTER_PROPERTIES
+  "$DIRECTOR_CLIENT_WRAPPER_HOME"/bin/cloudera-director-network --host=$(dig +short -x $(grep -m 1 "Inspecting" $DIRECTOR_CLIENT_WRAPPER_HOME/log/*|awk '{print $5}')|tr -d '\n') > $CLUSTER_PROPERTIES
 fi

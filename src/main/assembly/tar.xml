@@ -8,7 +8,7 @@
 	<fileSets>
 		<fileSet>
 			<outputDirectory>/</outputDirectory>
-			<directory>src/main/assembly/layout</directory>
+			<directory>src/main/assembly/root</directory>
 			<excludes>
 				<exclude>bin/*</exclude>
 			</excludes>
@@ -17,7 +17,7 @@
 		</fileSet>
 		<fileSet>
 			<outputDirectory>/</outputDirectory>
-			<directory>src/main/assembly/layout</directory>
+			<directory>src/main/assembly/root</directory>
 			<includes>
 				<include>bin/*</include>
 			</includes>
